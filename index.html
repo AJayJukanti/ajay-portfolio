@@ -254,7 +254,7 @@
       <h2>Backend engineering, done properly.</h2>
     </div>
     <div class="about-grid">
-      <div>
+      <div id="about-text"><!--ABOUT:START-->
         <p>I'm a Java backend developer with three years of experience building production microservices
           and web applications using <b>Java, J2EE, Spring Boot and Hibernate/JPA</b>. At FenixCommerce I
           develop order-processing services for an e-commerce order-management platform, where I led the
@@ -266,7 +266,7 @@
         <p>Before FenixCommerce, I mentored aspiring developers in core Java, J2EE and the Spring
           ecosystem, which sharpened how I explain and reason about the fundamentals I now build on
           every day.</p>
-      </div>
+      <!--ABOUT:END--></div>
       <div class="stats-col">
         <div class="stat-card"><span class="stat-num">3+ yrs</span><span class="stat-label">Professional Java / Spring Boot experience</span></div>
         <div class="stat-card"><span class="stat-num">GraphQL</span><span class="stat-label">Led a full REST → GraphQL migration</span></div>
@@ -467,6 +467,153 @@
 
 <script>
   document.getElementById('updated').textContent = new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long' });
+</script>
+
+<!-- ===========================================================================
+     Owner-only editing. Reading this page needs nothing; changing it needs the
+     same password as stats.html - checked server-side by the engine, never in
+     this script. The password itself is never stored, only held in memory for
+     the single request that needs it.
+
+     REACHABILITY: this calls the AJ engine directly, which only works when this
+     browser can actually reach it - the same machine, the same network, or once
+     Tailscale is connected. ENGINE_BASE below is the one line to change for that.
+     =========================================================================== -->
+<style>
+  #edit-fab{
+    position:fixed;bottom:20px;right:20px;width:44px;height:44px;border-radius:50%;
+    background:var(--card);border:1px solid var(--border);color:var(--text-dim);
+    display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;
+    box-shadow:0 4px 16px rgba(0,0,0,.25);z-index:30;
+  }
+  #edit-fab:hover{color:var(--accent);border-color:var(--accent)}
+  .edit-modal{
+    position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:40;
+    display:flex;align-items:center;justify-content:center;padding:20px;
+  }
+  .edit-card{
+    background:var(--card);border:1px solid var(--border);border-radius:16px;
+    padding:26px;max-width:440px;width:100%;max-height:85vh;overflow:auto;
+  }
+  .edit-card h3{margin:0 0 14px;font-size:17px}
+  .edit-card input[type=password],.edit-card textarea,.edit-card input[type=file]{
+    width:100%;background:var(--bg-soft);border:1px solid var(--border);border-radius:8px;
+    color:var(--text);padding:10px 12px;font-size:14px;font-family:inherit;margin-bottom:12px;
+  }
+  .edit-card textarea{min-height:160px;resize:vertical}
+  .edit-card .row{display:flex;gap:10px;justify-content:flex-end}
+  .edit-msg{font-size:13px;margin:0 0 12px;min-height:1.2em}
+  .edit-msg.bad{color:#ff8080}
+  .edit-msg.good{color:var(--accent)}
+</style>
+
+<div id="edit-fab" title="Edit this page">✎</div>
+
+<script>
+(function(){
+  // The one line to change once Tailscale (or another reachable address) is ready.
+  const ENGINE_BASE = 'http://localhost:9090';
+
+  const fab = document.getElementById('edit-fab');
+  fab.onclick = () => askPassword();
+
+  function modal(html){
+    closeModal();
+    const m = document.createElement('div');
+    m.className = 'edit-modal'; m.id = 'edit-modal';
+    m.innerHTML = `<div class="edit-card">${html}</div>`;
+    document.body.appendChild(m);
+    m.addEventListener('click', (e) => { if (e.target === m) closeModal(); });
+    return m;
+  }
+  function closeModal(){ document.getElementById('edit-modal')?.remove(); }
+
+  function askPassword(){
+    const m = modal(`
+      <h3>Edit this page</h3>
+      <input type="password" id="ep-pw" placeholder="Password" autocomplete="current-password">
+      <p class="edit-msg" id="ep-msg"></p>
+      <div class="row"><button class="btn btn-ghost" id="ep-cancel">Cancel</button>
+        <button class="btn btn-primary" id="ep-go">Continue</button></div>`);
+    const go = () => {
+      const pw = document.getElementById('ep-pw').value;
+      if (!pw){ document.getElementById('ep-msg').textContent = 'Enter your password.'; return; }
+      editMenu(pw);
+    };
+    m.querySelector('#ep-go').onclick = go;
+    m.querySelector('#ep-cancel').onclick = closeModal;
+    m.querySelector('#ep-pw').onkeydown = (e) => { if (e.key === 'Enter') go(); };
+    m.querySelector('#ep-pw').focus();
+  }
+
+  function editMenu(pw){
+    const currentAbout = document.getElementById('about-text').innerHTML.trim();
+    const m = modal(`
+      <h3>What do you want to change?</h3>
+      <p class="edit-msg" id="em-msg"></p>
+      <p style="font-size:13px;color:var(--text-dim);margin:0 0 8px">About section (HTML, e.g. &lt;p&gt;...&lt;/p&gt;)</p>
+      <textarea id="em-about">${currentAbout.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</textarea>
+      <div class="row" style="margin-bottom:20px"><button class="btn btn-primary" id="em-save-about">Save About</button></div>
+      <p style="font-size:13px;color:var(--text-dim);margin:0 0 8px">New profile photo</p>
+      <input type="file" id="em-photo" accept="image/*">
+      <div class="row"><button class="btn btn-primary" id="em-save-photo">Save Photo</button>
+        <button class="btn btn-ghost" id="em-close">Close</button></div>`);
+
+    // textarea holds the escaped markup as literal text for editing - unescape before sending.
+    const unescapeHtml = (s) => s.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
+
+    m.querySelector('#em-close').onclick = closeModal;
+
+    m.querySelector('#em-save-about').onclick = async () => {
+      const html = unescapeHtml(document.getElementById('em-about').value);
+      setMsg('em-msg', 'Saving...', false);
+      try {
+        const r = await fetch(`${ENGINE_BASE}/api/v1/portfolio/about`, {
+          method: 'POST', headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ password: pw, html })
+        });
+        const out = await r.json();
+        setMsg('em-msg', out.message, !out.ok);
+      } catch (e) {
+        setMsg('em-msg', 'Could not reach the engine: ' + e.message, true);
+      }
+    };
+
+    m.querySelector('#em-save-photo').onclick = async () => {
+      const file = document.getElementById('em-photo').files[0];
+      if (!file){ setMsg('em-msg', 'Pick a photo first.', true); return; }
+      setMsg('em-msg', 'Uploading...', false);
+      try {
+        const base64 = await fileToBase64(file);
+        const r = await fetch(`${ENGINE_BASE}/api/v1/portfolio/photo`, {
+          method: 'POST', headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ password: pw, imageBase64: base64 })
+        });
+        const out = await r.json();
+        setMsg('em-msg', out.message, !out.ok);
+      } catch (e) {
+        setMsg('em-msg', 'Could not reach the engine: ' + e.message, true);
+      }
+    };
+  }
+
+  function setMsg(id, text, bad){
+    const el = document.getElementById(id);
+    el.textContent = text;
+    el.className = 'edit-msg ' + (bad ? 'bad' : 'good');
+  }
+
+  function fileToBase64(file){
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result.split(',')[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+})();
 </script>
 </body>
 </html>
