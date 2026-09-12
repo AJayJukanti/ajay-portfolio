@@ -211,6 +211,7 @@
 </head>
 <body>
 
+<!--CONTENT:START-->
 <nav>
   <div class="wrap">
     <div class="brand">AJAY<span>.</span>JUKANTI</div>
@@ -254,7 +255,7 @@
       <h2>Backend engineering, done properly.</h2>
     </div>
     <div class="about-grid">
-      <div id="about-text"><!--ABOUT:START-->
+      <div id="about-text">
         <p>I'm a Java backend developer with three years of experience building production microservices
           and web applications using <b>Java, J2EE, Spring Boot and Hibernate/JPA</b>. At FenixCommerce I
           develop order-processing services for an e-commerce order-management platform, where I led the
@@ -266,7 +267,7 @@
         <p>Before FenixCommerce, I mentored aspiring developers in core Java, J2EE and the Spring
           ecosystem, which sharpened how I explain and reason about the fundamentals I now build on
           every day.</p>
-      <!--ABOUT:END--></div>
+      </div>
       <div class="stats-col">
         <div class="stat-card"><span class="stat-num">3+ yrs</span><span class="stat-label">Professional Java / Spring Boot experience</span></div>
         <div class="stat-card"><span class="stat-num">GraphQL</span><span class="stat-label">Led a full REST → GraphQL migration</span></div>
@@ -464,6 +465,7 @@
     Ajay Jukanti · Hyderabad, India · Last updated <span id="updated"></span>
   </div>
 </footer>
+<!--CONTENT:END-->
 
 <script>
   document.getElementById('updated').textContent = new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long' });
@@ -546,29 +548,46 @@
     m.querySelector('#ep-pw').focus();
   }
 
-  function editMenu(pw){
-    const currentAbout = document.getElementById('about-text').innerHTML.trim();
+  // Whole page content is editable, not one fixed field - his direct correction:
+  // "edit About and photo" was ONE EXAMPLE of wanting to change the page, not the
+  // complete list of what can ever be changed. Reads the REAL raw page source (not
+  // the DOM's own re-serialisation, which can quietly reformat attributes/tags) so
+  // what he edits is exactly what is really in the file, and exactly what the
+  // engine will write back.
+  async function editMenu(pw){
     const m = modal(`
-      <h3>What do you want to change?</h3>
-      <p class="edit-msg" id="em-msg"></p>
-      <p style="font-size:13px;color:var(--text-dim);margin:0 0 8px">About section (HTML, e.g. &lt;p&gt;...&lt;/p&gt;)</p>
-      <textarea id="em-about">${currentAbout.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</textarea>
-      <div class="row" style="margin-bottom:20px"><button class="btn btn-primary" id="em-save-about">Save About</button></div>
+      <h3>Edit this page</h3>
+      <p class="edit-msg" id="em-msg">Loading current content…</p>
+      <p style="font-size:13px;color:var(--text-dim);margin:0 0 8px">
+        Page content (real HTML - nav through footer). Edit anything: text, a whole
+        section, add or remove something entirely.</p>
+      <textarea id="em-content" style="min-height:320px" disabled></textarea>
+      <div class="row" style="margin-bottom:20px"><button class="btn btn-primary" id="em-save-content">Save Content</button></div>
       <p style="font-size:13px;color:var(--text-dim);margin:0 0 8px">New profile photo</p>
       <input type="file" id="em-photo" accept="image/*">
       <div class="row"><button class="btn btn-primary" id="em-save-photo">Save Photo</button>
         <button class="btn btn-ghost" id="em-close">Close</button></div>`);
 
-    // textarea holds the escaped markup as literal text for editing - unescape before sending.
-    const unescapeHtml = (s) => s.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
-
     m.querySelector('#em-close').onclick = closeModal;
 
-    m.querySelector('#em-save-about').onclick = async () => {
-      const html = unescapeHtml(document.getElementById('em-about').value);
+    const textarea = document.getElementById('em-content');
+    try {
+      const raw = await fetch(location.href, { cache: 'no-store' }).then(r => r.text());
+      const s = raw.indexOf('<!--CONTENT:START-->') + '<!--CONTENT:START-->'.length;
+      const e = raw.indexOf('<!--CONTENT:END-->');
+      if (s < 0 || e < 0 || e <= s) throw new Error('could not find the content markers in the real page');
+      textarea.value = raw.slice(s, e).trim();
+      textarea.disabled = false;
+      setMsg('em-msg', '', false);
+    } catch (err) {
+      setMsg('em-msg', 'Could not load current content: ' + err.message, true);
+    }
+
+    m.querySelector('#em-save-content').onclick = async () => {
+      const html = textarea.value;
       setMsg('em-msg', 'Saving...', false);
       try {
-        const r = await fetch(`${ENGINE_BASE}/api/v1/portfolio/about`, {
+        const r = await fetch(`${ENGINE_BASE}/api/v1/portfolio/content`, {
           method: 'POST', headers: {'Content-Type':'application/json'},
           body: JSON.stringify({ password: pw, html })
         });
