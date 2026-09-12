@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ajay Jukanti — Java Backend Developer</title>
+<meta name="description" content="Java Backend Developer specialising in Spring Boot, microservices, REST & GraphQL APIs.">
+<style>
+  :root{
+    --bg:#0b0f14;
+    --bg-soft:#11161d;
+    --card:#151b23;
+    --border:#232b36;
+    --text:#e8edf2;
+    --text-dim:#9aa7b4;
+    --accent:#5ce1c7;
+    --accent-soft:rgba(92,225,199,0.12);
+    --accent-2:#7aa2ff;
+    --max:920px;
+  }
+  @media (prefers-color-scheme: light){
+    :root{
+      --bg:#f6f8fa;
+      --bg-soft:#ffffff;
+      --card:#ffffff;
+      --border:#e3e8ee;
+      --text:#161b22;
+      --text-dim:#57616c;
+      --accent:#0f8f79;
+      --accent-soft:rgba(15,143,121,0.10);
+      --accent-2:#3358d4;
+    }
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--accent-2)}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+
+  /* ---------- nav ---------- */
+  nav{
+    position:sticky;top:0;z-index:20;
+    background:color-mix(in srgb, var(--bg) 85%, transparent);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;gap:16px}
+  .brand{font-weight:700;letter-spacing:0.02em;font-size:15px;white-space:nowrap;flex-shrink:0}
+  .brand span{color:var(--accent)}
+  nav ul{
+    list-style:none;display:flex;gap:26px;margin:0;padding:0;
+    min-width:0;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;
+  }
+  nav ul::-webkit-scrollbar{display:none}
+  nav a{color:var(--text-dim);text-decoration:none;font-size:14px;font-weight:500;transition:color .15s;white-space:nowrap}
+  nav a:hover{color:var(--text)}
+  @media (max-width:640px){
+    nav .wrap{padding:12px 16px;gap:10px}
+    nav ul{gap:16px}
+    nav a{font-size:13px}
+    .brand{font-size:13px}
+  }
+
+  /* ---------- hero ---------- */
+  header.hero{padding:96px 0 64px;position:relative;overflow:hidden}
+  header.hero::before{
+    content:"";position:absolute;inset:-40% -10% auto -10%;height:520px;
+    background:radial-gradient(closest-side, var(--accent-soft), transparent 70%);
+    pointer-events:none;
+  }
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:13px;color:var(--accent);font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+    background:var(--accent-soft);border:1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+    padding:6px 14px;border-radius:999px;margin-bottom:22px;
+  }
+  .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+  h1{
+    font-size:clamp(34px,5.4vw,54px);
+    line-height:1.08;
+    margin:0 0 16px;
+    letter-spacing:-0.02em;
+    font-weight:700;
+  }
+  h1 em{font-style:normal;color:var(--accent)}
+  .role{font-size:clamp(16px,2.2vw,20px);color:var(--text-dim);max-width:640px;margin:0 0 30px;font-weight:400}
+  .role b{color:var(--text);font-weight:600}
+  .cta-row{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:34px}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:11px 20px;border-radius:10px;font-size:14px;font-weight:600;text-decoration:none;
+    transition:transform .15s, border-color .15s, background .15s;border:1px solid transparent;
+  }
+  .btn:hover{transform:translateY(-1px)}
+  .btn-primary{background:var(--accent);color:#04211c}
+  .btn-primary:hover{background:color-mix(in srgb, var(--accent) 90%, white 10%)}
+  .btn-ghost{border-color:var(--border);color:var(--text);background:var(--bg-soft)}
+  .btn-ghost:hover{border-color:var(--accent)}
+  .contact-line{display:flex;flex-wrap:wrap;gap:18px;font-size:14px;color:var(--text-dim)}
+  .contact-line a{color:var(--text-dim);text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+  .contact-line a:hover{color:var(--accent)}
+  .hero-grid{display:grid;grid-template-columns:1fr auto;gap:48px;align-items:center}
+  @media (max-width:760px){.hero-grid{grid-template-columns:1fr}.hero-photo{order:-1;margin-bottom:8px}}
+  .hero-photo{
+    width:168px;height:168px;border-radius:50%;overflow:hidden;flex-shrink:0;
+    border:3px solid var(--accent);box-shadow:0 0 0 8px var(--accent-soft);
+  }
+  .hero-photo img{width:100%;height:100%;object-fit:cover;object-position:center 22%}
+
+  /* ---------- section shell ---------- */
+  section{padding:56px 0}
+  .section-head{margin-bottom:34px}
+  .kicker{font-size:12.5px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:var(--accent);margin:0 0 8px}
+  h2{font-size:clamp(22px,3vw,28px);margin:0;letter-spacing:-0.01em}
+  .lead{color:var(--text-dim);max-width:640px;margin:10px 0 0;font-size:15px}
+
+  /* ---------- about ---------- */
+  .about-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:36px;align-items:start}
+  @media (max-width:760px){.about-grid{grid-template-columns:1fr}}
+  .about-grid p{color:var(--text-dim);margin:0 0 14px}
+  .stat-card{
+    background:var(--card);border:1px solid var(--border);border-radius:14px;
+    padding:20px;display:flex;flex-direction:column;gap:4px;
+  }
+  .stats-col{display:grid;gap:14px}
+  .stat-num{font-size:26px;font-weight:700;color:var(--accent)}
+  .stat-label{font-size:13px;color:var(--text-dim)}
+
+  /* ---------- skills ---------- */
+  .skill-groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+  .skill-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px}
+  .skill-card h3{margin:0 0 12px;font-size:13.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-dim)}
+  .pill-row{display:flex;flex-wrap:wrap;gap:8px}
+  .pill{
+    font-size:12.5px;font-weight:600;padding:6px 11px;border-radius:8px;
+    background:var(--bg-soft);border:1px solid var(--border);color:var(--text);
+  }
+
+  /* ---------- timeline ---------- */
+  .job{
+    position:relative;padding:0 0 40px 28px;border-left:2px solid var(--border);
+  }
+  .job:last-child{padding-bottom:4px}
+  .job::before{
+    content:"";position:absolute;left:-7px;top:4px;width:12px;height:12px;border-radius:50%;
+    background:var(--accent);box-shadow:0 0 0 4px var(--bg);
+  }
+  .job-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:4px}
+  .job-title{font-size:17px;font-weight:700}
+  .job-meta{font-size:13px;color:var(--text-dim);white-space:nowrap}
+  .job-org{color:var(--accent);font-weight:600;font-size:14px;margin-bottom:10px}
+  .job-tags{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 12px}
+  .job-tags .pill{font-size:11.5px;padding:4px 9px}
+  .job ul{margin:0;padding-left:18px;color:var(--text-dim);font-size:14.5px}
+  .job li{margin-bottom:8px}
+  .job li:last-child{margin-bottom:0}
+  .job li b{color:var(--text);font-weight:600}
+
+  /* ---------- project card ---------- */
+  .project-card{
+    background:var(--card);border:1px solid var(--border);border-radius:16px;padding:26px;
+    display:grid;gap:14px;
+  }
+  .project-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
+  .project-head h3{margin:0;font-size:18px}
+  .badge{font-size:11.5px;font-weight:700;letter-spacing:.03em;color:var(--accent);background:var(--accent-soft);
+    border:1px solid color-mix(in srgb, var(--accent) 35%, transparent);padding:4px 10px;border-radius:999px;text-transform:uppercase}
+  .project-card p{margin:0;color:var(--text-dim);font-size:14.5px}
+  .project-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:4px}
+  .fact{background:var(--bg-soft);border:1px solid var(--border);border-radius:10px;padding:12px}
+  .fact b{display:block;font-size:15px;color:var(--text)}
+  .fact span{font-size:12.5px;color:var(--text-dim)}
+
+  /* ---------- education ---------- */
+  .edu-row{display:flex;justify-content:space-between;gap:14px;padding:16px 0;border-top:1px solid var(--border)}
+  .edu-row:last-child{}
+  .edu-title{font-weight:600;font-size:15px}
+  .edu-sub{color:var(--text-dim);font-size:13.5px;margin-top:2px}
+  .edu-meta{color:var(--text-dim);font-size:13.5px;white-space:nowrap}
+
+  /* ---------- contact / footer ---------- */
+  .contact-card{
+    background:linear-gradient(135deg, var(--accent-soft), transparent 60%), var(--card);
+    border:1px solid var(--border);border-radius:18px;padding:40px;text-align:center;
+  }
+  .contact-card h2{margin-bottom:10px}
+  .contact-card p{color:var(--text-dim);max-width:480px;margin:0 auto 26px}
+  footer{padding:34px 0 50px;text-align:center;color:var(--text-dim);font-size:13px}
+  footer a{color:var(--text-dim)}
+
+  ::selection{background:var(--accent);color:#04211c}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="brand">AJAY<span>.</span>JUKANTI</div>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow"><span class="dot"></span> Open to new opportunities</div>
+        <h1>Java Backend Developer<br>building <em>reliable</em> systems at scale.</h1>
+        <p class="role">3 years shipping production <b>Spring Boot microservices</b>, <b>REST &amp; GraphQL APIs</b>,
+          and event-driven integrations — currently at <b>FenixCommerce</b>, in e-commerce order management.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="mailto:ajayjukanti110@gmail.com">Get in touch</a>
+          <a class="btn btn-ghost" href="#experience">View experience</a>
+        </div>
+        <div class="contact-line">
+          <a href="mailto:ajayjukanti110@gmail.com">✉ ajayjukanti110@gmail.com</a>
+          <a href="tel:+918096190135">📞 +91 80961 90135</a>
+          <span>📍 Hyderabad, Telangana, India</span>
+        </div>
+      </div>
+      <div class="hero-photo"><img src="profile.jpg" alt="Ajay Jukanti"></div>
+    </div>
+  </div>
+</header>
+
+<section id="about">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker">About</p>
+      <h2>Backend engineering, done properly.</h2>
+    </div>
+    <div class="about-grid">
+      <div>
+        <p>I'm a Java backend developer with three years of experience building production microservices
+          and web applications using <b>Java, J2EE, Spring Boot and Hibernate/JPA</b>. At FenixCommerce I
+          develop order-processing services for an e-commerce order-management platform, where I led the
+          migration of legacy Shopify REST integrations to the <b>Shopify GraphQL API</b>.</p>
+        <p>I'm comfortable across the full stack of a backend feature: RESTful service design, Spring MVC
+          and Spring Data, batch processing, Elasticsearch-backed search, SQL data modelling, and
+          webhook-driven event integration — owning work end to end from design through testing and
+          release in an Agile, distributed team.</p>
+        <p>Before FenixCommerce, I mentored aspiring developers in core Java, J2EE and the Spring
+          ecosystem, which sharpened how I explain and reason about the fundamentals I now build on
+          every day.</p>
+      </div>
+      <div class="stats-col">
+        <div class="stat-card"><span class="stat-num">3+ yrs</span><span class="stat-label">Professional Java / Spring Boot experience</span></div>
+        <div class="stat-card"><span class="stat-num">GraphQL</span><span class="stat-label">Led a full REST → GraphQL migration</span></div>
+        <div class="stat-card"><span class="stat-num">Elasticsearch</span><span class="stat-label">Built CRUD + search for order/product lookups</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker">Skills</p>
+      <h2>Technical toolkit</h2>
+      <p class="lead">What I actually build with, day to day.</p>
+    </div>
+    <div class="skill-groups">
+      <div class="skill-card">
+        <h3>Languages</h3>
+        <div class="pill-row">
+          <span class="pill">Java</span><span class="pill">J2EE</span><span class="pill">SQL</span><span class="pill">JavaScript</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h3>Frameworks</h3>
+        <div class="pill-row">
+          <span class="pill">Spring Boot</span><span class="pill">Spring MVC</span><span class="pill">Spring IOC</span>
+          <span class="pill">Spring AOP</span><span class="pill">Spring Data</span><span class="pill">Spring ORM</span>
+          <span class="pill">Spring Batch</span><span class="pill">Spring Security</span><span class="pill">Hibernate</span><span class="pill">JPA</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h3>Architecture &amp; APIs</h3>
+        <div class="pill-row">
+          <span class="pill">Microservices</span><span class="pill">RESTful Web Services</span><span class="pill">GraphQL</span>
+          <span class="pill">MVC</span><span class="pill">Webhooks</span><span class="pill">Event-Driven Integration</span><span class="pill">Jackson (JSON)</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h3>J2EE &amp; Web</h3>
+        <div class="pill-row">
+          <span class="pill">JDBC</span><span class="pill">Servlets</span><span class="pill">JSP</span>
+          <span class="pill">HTML5</span><span class="pill">CSS</span><span class="pill">JavaScript</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h3>Databases &amp; Search</h3>
+        <div class="pill-row">
+          <span class="pill">MySQL</span><span class="pill">Oracle</span><span class="pill">SQL</span><span class="pill">Elasticsearch</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h3>Build &amp; Quality</h3>
+        <div class="pill-row">
+          <span class="pill">Maven</span><span class="pill">Gradle</span><span class="pill">Git / GitHub</span>
+          <span class="pill">JUnit</span><span class="pill">SonarQube</span><span class="pill">Log4j</span>
+          <span class="pill">Postman</span><span class="pill">Swagger / OpenAPI</span><span class="pill">Kibana</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h3>Tools &amp; Practices</h3>
+        <div class="pill-row">
+          <span class="pill">Apache Tomcat</span><span class="pill">IntelliJ IDEA</span><span class="pill">Eclipse</span>
+          <span class="pill">Spring Tool Suite</span><span class="pill">Jira</span><span class="pill">Agile / Scrum</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker">Experience</p>
+      <h2>Where I've worked</h2>
+    </div>
+
+    <div class="job">
+      <div class="job-head">
+        <div class="job-title">Associate Product Developer</div>
+        <div class="job-meta">Oct 2023 – Present</div>
+      </div>
+      <div class="job-org">FenixCommerce · Hyderabad, India</div>
+      <div class="job-tags">
+        <span class="pill">Java</span><span class="pill">Spring Boot</span><span class="pill">Microservices</span>
+        <span class="pill">REST</span><span class="pill">GraphQL</span><span class="pill">Elasticsearch</span>
+      </div>
+      <ul>
+        <li><b>Migrated legacy Shopify REST API integrations to the Shopify GraphQL API</b> — implemented
+          Shopify's GraphQL schema to optimise queries and mutations, cutting redundant API call overhead
+          through targeted query customisation.</li>
+        <li>Developed and maintained <b>Spring Boot microservices</b> for the inbound order pipeline, from
+          order placement on the Shopify storefront through fulfilment by third-party print providers,
+          ensuring accurate data synchronisation and real-time order tracking.</li>
+        <li>Designed and consumed <b>RESTful web services</b> with Spring Boot and Spring MVC, using
+          Hibernate/JPA for persistence and Jackson for JSON serialisation and parsing.</li>
+        <li>Implemented <b>webhooks</b> to process real-time events — order placement, fulfilment updates
+          and shipment tracking changes — keeping downstream systems consistent without polling.</li>
+        <li>Built <b>Elasticsearch</b> CRUD operations to index, retrieve, update and delete documents,
+          supporting fast order and product lookups, and implemented batch processing for bulk business
+          operations.</li>
+        <li>Owned testing and debugging through the GraphQL migration to guarantee feature parity and data
+          integrity — validating endpoints with Postman and Swagger, enforcing code quality with
+          SonarQube, and tracking delivery in Jira.</li>
+        <li>Ran a comparative analysis of shipping carrier APIs (capabilities, documentation, pricing,
+          reliability) to inform integration decisions, and built dynamic transactional email flows for
+          shipment confirmation and tracking updates in Klaviyo.</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <div class="job-head">
+        <div class="job-title">Java Mentor</div>
+        <div class="job-meta">2022 – 2023</div>
+      </div>
+      <div class="job-org">Naresh i Technologies · Hyderabad, India</div>
+      <div class="job-tags">
+        <span class="pill">Core Java</span><span class="pill">J2EE</span><span class="pill">Spring MVC</span><span class="pill">Spring Boot</span>
+      </div>
+      <ul>
+        <li>Mentored learners in core Java, J2EE and the Spring ecosystem — OOP concepts, collections,
+          exception handling, JDBC, Servlets, JSP, Spring MVC and Spring Boot.</li>
+        <li>Reviewed and debugged trainee code, explaining root causes rather than fixes, and guided
+          hands-on assignments through to a working build.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker">Personal Project</p>
+      <h2>Built outside of work</h2>
+    </div>
+    <div class="project-card">
+      <div class="project-head">
+        <h3>Personal AI Agent Platform</h3>
+        <span class="badge">Solo project</span>
+      </div>
+      <p>Designed and built a full personal automation engine from scratch: a modular Spring Boot
+        monolith on PostgreSQL, integrating the Telegram Bot API for real-time interaction, Google's
+        Gemini models for natural-language understanding, and browser automation for external data
+        collection — with an emphasis on correctness, auditability and test coverage throughout.</p>
+      <div class="project-facts">
+        <div class="fact"><b>Spring Boot + PostgreSQL</b><span>Flyway-versioned schema, JDBC-first data layer</span></div>
+        <div class="fact"><b>1,400+ JUnit tests</b><span>Hardened through iterative, real-world verification</span></div>
+        <div class="fact"><b>Telegram Bot API</b><span>Real-time two-way interaction and notifications</span></div>
+        <div class="fact"><b>Gemini AI integration</b><span>Grounded natural-language understanding, JSON-validated</span></div>
+        <div class="fact"><b>Audit-logged writes</b><span>Every mutating action recorded, append-only</span></div>
+        <div class="fact"><b>Safe self-modification</b><span>Reviewed code changes with automatic rollback</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="education">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker">Education</p>
+      <h2>Academic background</h2>
+    </div>
+    <div class="edu-row" style="border-top:none">
+      <div>
+        <div class="edu-title">Bachelor of Science (B.Sc.)</div>
+        <div class="edu-sub">Government Degree College, Yellareddy</div>
+      </div>
+      <div class="edu-meta">2022 · CGPA 6.82</div>
+    </div>
+    <div class="edu-row">
+      <div>
+        <div class="edu-title">Intermediate (10+2, M.P.C.)</div>
+        <div class="edu-sub">Telangana State Board of Intermediate Education</div>
+      </div>
+      <div class="edu-meta">2016 · 70%</div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="contact-card">
+      <h2>Let's work together</h2>
+      <p>Open to backend / Java Spring Boot roles. The fastest way to reach me is email or phone.</p>
+      <div class="cta-row" style="justify-content:center">
+        <a class="btn btn-primary" href="mailto:ajayjukanti110@gmail.com">✉ ajayjukanti110@gmail.com</a>
+        <a class="btn btn-ghost" href="tel:+918096190135">📞 +91 80961 90135</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    Ajay Jukanti · Hyderabad, India · Last updated <span id="updated"></span>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('updated').textContent = new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long' });
+</script>
+</body>
+</html>
