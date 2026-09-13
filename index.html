@@ -537,10 +537,22 @@
       <p class="edit-msg" id="ep-msg"></p>
       <div class="row"><button class="btn btn-ghost" id="ep-cancel">Cancel</button>
         <button class="btn btn-primary" id="ep-go">Continue</button></div>`);
-    const go = () => {
+    const go = async () => {
       const pw = document.getElementById('ep-pw').value;
-      if (!pw){ document.getElementById('ep-msg').textContent = 'Enter your password.'; return; }
-      editMenu(pw);
+      const msg = document.getElementById('ep-msg');
+      if (!pw){ msg.textContent = 'Enter your password.'; return; }
+      msg.textContent = 'Checking...';
+      try {
+        const r = await fetch(`${ENGINE_BASE}/api/v1/portfolio/verify`, {
+          method: 'POST', headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ password: pw })
+        });
+        const out = await r.json();
+        if (!out.ok){ msg.textContent = out.message; return; }
+        editMenu(pw);
+      } catch (e) {
+        msg.textContent = 'Could not reach the engine: ' + e.message;
+      }
     };
     m.querySelector('#ep-go').onclick = go;
     m.querySelector('#ep-cancel').onclick = closeModal;
