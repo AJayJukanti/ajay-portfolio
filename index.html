@@ -513,8 +513,9 @@
 
 <script>
 (function(){
-  // The one line to change once Tailscale (or another reachable address) is ready.
-  const ENGINE_BASE = 'http://localhost:9090';
+  // ngrok tunnel to the engine (port 9090) - a free reserved dev domain on his own
+  // account, so the address never changes even though it isn't a real owned domain.
+  const ENGINE_BASE = 'https://estrogenic-nadia-prejuvenile.ngrok-free.dev';
 
   const fab = document.getElementById('edit-fab');
   fab.onclick = () => askPassword();
